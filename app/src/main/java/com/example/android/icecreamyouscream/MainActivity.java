@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final String LOG_TAG = MainActivity.class.getName();
 
-    private static final String searchUrl = "http://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test";
+    private static final String searchUrl = "http://content.guardianapis.com/search?q=icecream&api-key=test";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +88,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (data != null && !data.isEmpty()) {
             mAdapter.addAll(data);
         }
-
-        mEmptyView.setText(R.string.no_results_message);
+        else{
+            mEmptyView.setText(R.string.no_results_message);
+        }
     }
 
     @Override

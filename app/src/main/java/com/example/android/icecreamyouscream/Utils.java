@@ -26,7 +26,7 @@ public final class Utils {
     }
 
     public static List<Article> fetchArticleData(String requestUrl) {
-
+        Log.i(LOG_TAG, "TEST: fetchArticleData() Started");
         URL url = createUrl(requestUrl);
 
         String jsonResponse = null;
@@ -49,7 +49,7 @@ public final class Utils {
     }
 
     private static List<Article> extractFeatureFromJson(String articleJSON) {
-
+        Log.i(LOG_TAG, "TEST: extractFeatureFromJson called");
         if (TextUtils.isEmpty(articleJSON)) {
             return null;
         }
@@ -60,8 +60,8 @@ public final class Utils {
             JSONObject baseJsonResponse = new JSONObject(articleJSON);
 
             JSONArray bookArray;
-            if (baseJsonResponse.has("response")){
-                bookArray = baseJsonResponse.getJSONArray("response");
+            if (baseJsonResponse.getJSONObject("response").has("results")){
+                bookArray = baseJsonResponse.getJSONObject("response").getJSONArray("results");
             }else {
                 return null;
             }
@@ -69,25 +69,23 @@ public final class Utils {
             for (int i = 0; i < bookArray.length(); i++) {
                 JSONObject currentArticle = bookArray.getJSONObject(i);
 
-                JSONObject results = currentArticle.getJSONObject("results");
-
-                String title = results.getString("webTitle");
+                String title = currentArticle.getString("webTitle");
 
                 String date;
-                if (results.has("webPublicationDate")) {
-                    date = results.getString("webPublicationDate");
+                if (currentArticle.has("webPublicationDate")) {
+                    date = currentArticle.getString("webPublicationDate");
                 } else {
                     date = "Date N/A";
                 }
 
                 String section;
-                if (results.has("sectionName")) {
-                    section = results.getString("sectionName");
+                if (currentArticle.has("sectionName")) {
+                    section = currentArticle.getString("sectionName");
                 }else {
                     section = "Section N/A";
                 }
 
-                String url = results.getString("webUrl");
+                String url = currentArticle.getString("webUrl");
 
                 Article article = new Article(title, date, url, section);
 
